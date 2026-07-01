@@ -35,6 +35,8 @@ void draw() {
   background(20);
   
   pg.beginDraw();
+  pg.loadPixels();
+  
   for(int j = 0; j < spaceH; j++) {
     for(int i = 0; i < spaceW; i++) {
       float phase = psi[i][j].heading();
@@ -54,10 +56,11 @@ void draw() {
         break;
       }
       
-      pg.stroke(red(drawColor) + max(V[i][j], 0) * 255, green(drawColor), blue(drawColor) - min(V[i][j], 0) * 255, 255);
-      pg.point(i, j);
+      pg.pixels[j * spaceW + i] = color(red(drawColor) + max(V[i][j], 0) * 255, green(drawColor), blue(drawColor) - min(V[i][j], 0) * 255, 255);
     }
   }
+  
+  pg.updatePixels();
   pg.endDraw();
   
   if(!isPaused && !isObserved) update();
