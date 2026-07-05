@@ -1,7 +1,7 @@
 
 import controlP5.*;
 
-int spaceW = 102, spaceH = 102;
+int spaceW = 100, spaceH = 100;
 
 PGraphics pg;
 int drawMode = 0;

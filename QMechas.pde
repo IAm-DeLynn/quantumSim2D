@@ -10,8 +10,8 @@ float maxAmpl;
 void nextStep(float dt) {
   PVector[][] laplacian = new PVector[spaceW][spaceH];
   
-  for(int j = 1; j < spaceH - 1; j++) {
-    for(int i = 1; i < spaceW - 1; i++) {
+  for(int j = 0; j < spaceH; j++) {
+    for(int i = 0; i < spaceW; i++) {
       /* laplacian(psi[i][j]) = (psi[i - 1][j] +
                                  psi[i + 1][j] +
                                  psi[i][j - 1] +
@@ -21,19 +21,27 @@ void nextStep(float dt) {
       
       laplacian[i][j] = new PVector();
       
-      // if(i == 0 || j == 0 || i == spaceW - 1 || j == spaceH - 1) continue; // Skip border cells because there is laplacian undefined
+      PVector psiNextX = new PVector();
+      PVector psiPrevX = new PVector();
+      PVector psiNextY = new PVector();
+      PVector psiPrevY = new PVector();
       
-      laplacian[i][j].add(psi[i - 1][j]);
-      laplacian[i][j].add(psi[i + 1][j]);
-      laplacian[i][j].add(psi[i][j - 1]);
-      laplacian[i][j].add(psi[i][j + 1]);
+      if(i < spaceW - 1) psiNextX = psi[i + 1][j];
+      if(i > 0) psiPrevX = psi[i - 1][j];
+      if(j < spaceH - 1) psiNextY = psi[i][j + 1];
+      if(j > 0) psiPrevY = psi[i][j - 1];
+      
+      laplacian[i][j].add(psiNextX);
+      laplacian[i][j].add(psiPrevX);
+      laplacian[i][j].add(psiNextY);
+      laplacian[i][j].add(psiPrevY);
       laplacian[i][j].sub(PVector.mult(psi[i][j], 4));
       laplacian[i][j].div(dx * dx);
     }
   }
   
-  for(int j = 1; j < spaceH - 1; j++) {
-    for(int i = 1; i < spaceW - 1; i++) {
+  for(int j = 0; j < spaceH; j++) {
+    for(int i = 0; i < spaceW; i++) {
       // dpsi[i][j] / dt = i / (2 * m) * laplacian(psi[i][j]) - i * potential(i, j) * psi[i][j];
       
       laplacian[i][j].div(2 * m);                            // laplacian(psi[i][j]) / (2 * m)
@@ -50,8 +58,8 @@ void nextStep(float dt) {
 void normalize() {
   float sum = 0.0;
   
-  for(int j = 0; j < spaceH - 1; j++) {
-    for(int i = 0; i < spaceW - 1; i++) {
+  for(int j = 0; j < spaceH; j++) {
+    for(int i = 0; i < spaceW; i++) {
       sum += psi[i][j].magSq();
     }
   }
@@ -60,8 +68,8 @@ void normalize() {
   
   maxAmpl = 0;
   
-  for(int j = 1; j < spaceH - 1; j++) {
-    for(int i = 1; i < spaceW - 1; i++) {
+  for(int j = 0; j < spaceH; j++) {
+    for(int i = 0; i < spaceW; i++) {
       psi[i][j].div(sum);
       if(normColor) maxAmpl = max(psi[i][j].mag(), maxAmpl);
       else maxAmpl = 1;
@@ -73,15 +81,15 @@ void observe() {
   float probability = 0;
   float random = random(0, 1);
   
-  for(int j = 1; j < spaceH - 1; j++) {
-    for(int i = 1; i < spaceW - 1; i++) {
+  for(int j = 0; j < spaceH; j++) {
+    for(int i = 0; i < spaceW; i++) {
       probability += psi[i][j].magSq();
       
       if(random < probability) {
         timespeed = 0;
         
-        for(int n = 0; n < spaceH - 1; n++) {
-          for(int m = 0; m < spaceW - 1; m++) {
+        for(int n = 0; n < spaceH; n++) {
+          for(int m = 0; m < spaceW; m++) {
             psi[m][n] = new PVector();
           }
         }
