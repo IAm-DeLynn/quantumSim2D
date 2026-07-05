@@ -11,5 +11,5 @@ void reverseTime() {
 }
 
 void takeImg() {
-  pg.save((spaceW - 2) + "x" + (spaceH - 2) + " t" + nfp(t, 1, 7) + " m" + m + " dx" + dx + ".png");
+  pg.save(spaceW + "x" + spaceH + "_t=" + nfp(t, 1, 7) + "_m=" + m + "_dx=" + dx + ".png");
 }
